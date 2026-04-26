@@ -58,31 +58,29 @@ db.readings.insertMany([
 ])
 
 //Question 2: Find all prescriptions with status "Active" AND expiry_date is after today's date.
-db.readings.find({
+db.prescriptions.find({
   $and: [
-    { is_completed: false },
-    { pages_read: { $gt: 100 } }
+    { status: "Active" },
+    { expiry_date: { $gt: new Date() } }
   ]
 })
 
 //Question 3: Update the status to "Expired" for all prescriptions where expiry_date is before today's date.
-db.readings.updateMany(
-  { completion_date: { $ne: null } },
-  { $set: { is_completed: true } }
+db.prescriptions.updateMany(
+  { expiry_date: { $lt: new Date() } },
+  { $set: { status: "Expired" } }
 )
 
 //Question 4: Delete all prescriptions with status "Fulfilled" AND issue_date before "2024-01-01".
-db.readings.deleteMany({
+db.prescriptions.deleteMany({
   $and: [
-    { start_date: { $lt: new Date("2023-01-01") } },
-    { is_completed: false }
+    { status: "Fulfilled" },
+    { issue_date: { $lt: new Date("2024-01-01") } }
   ]
 })
 
 //Question 5: Find all prescriptions sorted by issue_date in descending order, displaying only patient_name, medicine_name, and status.
-db.readings.find({
-  $and: [
-    { genre: "Fiction" },
-    { is_completed: true }
-  ]
-})
+db.prescriptions.find(
+  {},
+  { patient_name: 1, medicine_name: 1, status: 1, _id: 0 }
+).sort({ issue_date: -1 })

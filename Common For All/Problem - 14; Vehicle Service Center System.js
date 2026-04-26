@@ -70,13 +70,6 @@ db.services.deleteMany({
 })
 
 //Question 5: Find all records sorted by cost in descending order, displaying only customer_name,service_type, and cost.
-db.services.deleteMany({
-  $and: [
-    { status: "Completed" },
-    { cost: { $lt: 500 } }
-  ]
-})
-
 db.services.find(
   {},
   { customer_name: 1, service_type: 1, cost: 1, _id: 0 }
